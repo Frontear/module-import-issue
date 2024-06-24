@@ -5,7 +5,7 @@
   outputs = { self, nixpkgs, ... } @ inputs: {
     nixosConfigurations."nixos" = nixpkgs.lib.nixosSystem {
       specialArgs = {
-        inherit self inputs;
+        inherit self;
       };
 
       modules = [
@@ -15,6 +15,8 @@
              self.nixosModules
            ];
 
+           frontear.impermanence.enable = true;
+
            boot.loader.grub.enable = false;
            fileSystems."/".device = "nodev";
            nixpkgs.hostPlatform = "x86_64-linux";
@@ -23,6 +25,6 @@
       ];
     };
 
-    nixosModules = import ./modules;
+    nixosModules = import ./modules { inherit (inputs) impermanence; };
   };
 }
